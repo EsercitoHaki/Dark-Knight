@@ -14,6 +14,7 @@ public class PlayerPrimaryAttackState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        xInput = 0;
 
         if(comboCounter > 2 || Time.time >= lastTimeAttacked + comboWindow)
         {
@@ -22,14 +23,12 @@ public class PlayerPrimaryAttackState : PlayerState
 
         player.anim.SetInteger("ComboCounter", comboCounter);
 
-        #region Choose attack direction
         float attackDir = player.facingDir;
 
         if(xInput != 0)
         {
             attackDir = xInput;
         }
-        #endregion
 
         player.SetVelocity(player.attackMovement[comboCounter].x * attackDir, player.attackMovement[comboCounter].y);
 
