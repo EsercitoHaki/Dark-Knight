@@ -13,7 +13,7 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Enter();
 
-        player.ZeroVelocity();
+        player.SetZeroVelocity();
     }
 
     public override void Exit()
@@ -24,6 +24,11 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Update()
     {
         base.Update();
+
+        if(xInput == player.facingDir && player.IsWallDetected())
+        {
+            return;
+        }
 
         if (xInput != 0 && !player.isBusy)
         {
