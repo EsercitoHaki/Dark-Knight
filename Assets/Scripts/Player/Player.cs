@@ -13,6 +13,9 @@ public class Player : Entity
     public float jumpForce;
     public float dashSpeed;
     public float dashDuration;
+    private float defaultMoveSpeed;
+    private float defaultJumpForce;
+    private float defaultDashSpeed;
 
     #region States
     public PlayerStateMachine stateMachine { get; private set;}
@@ -23,6 +26,7 @@ public class Player : Entity
     public PlayerAirState airState { get; private set;}
     public PlayerDashState dashState { get; private set; }
     public PlayerPrimaryAttackState primaryAttack { get; private set;}
+    public PlayerDeadState deadState {get; private set;}
     #endregion
 
     protected override void Awake()
@@ -36,12 +40,19 @@ public class Player : Entity
         airState  = new PlayerAirState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         primaryAttack = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
+
+
+        deadState = new PlayerDeadState(this, stateMachine, "Die");
     }
 
     protected override void Start()
     {
         base.Start();
         stateMachine.Initialize(idleState);
+
+        defaultMoveSpeed = moveSpeed;
+        defaultJumpForce = jumpForce;
+        defaultDashSpeed = dashSpeed;
     }
 
     protected override void Update()
@@ -59,5 +70,12 @@ public class Player : Entity
     }
 
     public void AnimationTrigger() => stateMachine.currentState.AnimationFinishTrigger();
+
+    public override void Die()
+    {
+        base.Die();
+
+        stateMachine.ChangeState(deadState);
+    }
 
 }

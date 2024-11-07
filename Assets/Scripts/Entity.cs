@@ -25,6 +25,7 @@ public class Entity : MonoBehaviour
     public Animator anim { get; private set;}
     public Rigidbody2D rb { get; private set;}
     public EntityFX fx { get; private set;}
+    public CharacterStats stats {get; private set;}
     #endregion
 
 
@@ -38,6 +39,7 @@ public class Entity : MonoBehaviour
         fx = GetComponent<EntityFX>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        stats = GetComponent<CharacterStats>();
     }
 
     protected virtual void Update()
@@ -87,6 +89,8 @@ public class Entity : MonoBehaviour
     }
     #endregion
 
+    public virtual void DamageImpact() => StartCoroutine("HitKnockback");
+
     protected virtual IEnumerator HitKnockback()
     {
         isKnocked = true;
@@ -119,5 +123,10 @@ public class Entity : MonoBehaviour
         FlipController(_xVelocity);
     }
     #endregion
+
+    public virtual void Die()
+    {
+
+    }
 
 }
