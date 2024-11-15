@@ -18,6 +18,9 @@ public class CharacterStats : MonoBehaviour
     public int currentHealth;
     public System.Action onHealthChanged;
 
+    public bool isInvincible { get; private set; }
+
+    
     [Header("Offensive stats")]
     public Stat damage;
     public Stat critChance;
@@ -39,9 +42,17 @@ public class CharacterStats : MonoBehaviour
         isDead = true;
     }
 
+        public void MakeInvincible(bool _invincible) => isInvincible = _invincible;
+
+
     public virtual void DoDamage(CharacterStats _targetStats)
     {
+        bool criticalStrike = false;
+
         int totalDamage = damage.GetValue() + strength.GetValue();
+        
+        fx.CreateHitFx(_targetStats.transform,criticalStrike);
+
 
         totalDamage = CheckTargerArmor(_targetStats, totalDamage);
 

@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/ForestScene.unity
+    guid: 4219e4e8de1cc56428ae9b6ce69357c8
+  - enabled: 1
+    path: Assets/Scenes/SnowScene.unity
+    guid: f9ebe330fba3dc244b1c246cf3443a69
+  - enabled: 1
+    path: Assets/Scenes/HouseScene.unity
+    guid: 5346441897e6e4e41ad676c21db1c326
+  - enabled: 1
+    path: Assets/Scenes/BossDeathBringerScene.unity
+    guid: 79d54ba565f5e144593f731763979eb4
   m_configObjects: {}

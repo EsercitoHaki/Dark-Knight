@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntityFX : MonoBehaviour
 {
-    private SpriteRenderer sr;
+    protected SpriteRenderer sr;
 
     [Header("Flash FX")]
     [SerializeField] private float flashDuration;
@@ -16,6 +16,11 @@ public class EntityFX : MonoBehaviour
     [SerializeField] private Color[] igniteColor;
     [SerializeField] private Color[] shockColor;
 
+    [Header("Hit FX")]
+    [SerializeField] private GameObject hitFx;
+    [SerializeField] private GameObject criticalHitFx;
+
+
     private void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
@@ -24,7 +29,7 @@ public class EntityFX : MonoBehaviour
 
     public void MakeTransprent(bool _transprent)
     {
-        if(_transprent)
+        if (_transprent)
         {
             sr.color = Color.clear;
         }
@@ -117,4 +122,24 @@ public class EntityFX : MonoBehaviour
             sr.color = chillColor[1];
         }
     }
+
+    public void CreateHitFx(Transform _target, bool _critical)
+    {
+        float yRotation = 0;
+        
+        if (GetComponent<Entity>().facingDir == -1)
+        {
+            yRotation = 180;
+        }
+        
+
+        Vector3 hitFxRotation = new Vector3(0, yRotation, 0); // Giữ nguyên góc xoay, chỉ điều chỉnh theo hướng nhân vật
+
+        GameObject hitPrefab = _critical ? criticalHitFx : hitFx;
+
+        // Tạo đối tượng hiệu ứng va chạm tại vị trí _target với góc xoay đã được chỉnh sửa
+        GameObject newHitFx = Instantiate(hitPrefab, _target.position, Quaternion.Euler(hitFxRotation));
+        Destroy(newHitFx, .2f);
+    }
+
 }

@@ -19,6 +19,10 @@ public class Entity : MonoBehaviour
     [SerializeField] protected LayerMask whatIsGround;
 
     public int facingDir { get; private set; } = 1;
+    public SpriteRenderer sr { get; private set; }
+    public int knockbackDir { get; private set; }
+    public CapsuleCollider2D cd {  get; private set; }
+
     private bool facingRight = true;
 
     #region Components
@@ -36,10 +40,12 @@ public class Entity : MonoBehaviour
 
     protected virtual void Start()
     {
+        //sr = GetComponentInChildren<SpriteRenderer>();
         fx = GetComponent<EntityFX>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         stats = GetComponent<CharacterStats>();
+        cd = GetComponent<CapsuleCollider2D>();
     }
 
     protected virtual void Update()
@@ -62,7 +68,7 @@ public class Entity : MonoBehaviour
     protected virtual void OnDrawGizmos()
     {
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistane, wallCheck.position.y));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistane * facingDir, wallCheck.position.y));
         Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
 
@@ -87,9 +93,29 @@ public class Entity : MonoBehaviour
             Flip();
         }
     }
+
+    public virtual void SetupDefailtFacingDir(int _direction)
+    {
+        facingDir = _direction;
+        
+        if(facingDir == -1)
+        {
+            facingRight = false;
+        }
+    }
     #endregion
 
     public virtual void DamageImpact() => StartCoroutine("HitKnockback");
+
+    public virtual void SetupKnockbackDir(Transform _damageDirection)
+    {
+        if (_damageDirection.position.x > transform.position.x)
+            knockbackDir = -1;
+        else if (_damageDirection.position.x < transform.position.x)
+            knockbackDir = 1;
+
+       
+    }
 
     protected virtual IEnumerator HitKnockback()
     {
